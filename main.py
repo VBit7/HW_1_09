@@ -3,11 +3,11 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except KeyError:
-            return "KeyError"
+            return "--KeyError--"
         except ValueError:
-            return "ValueError"
+            return "--ValueError--"
         except IndexError:
-            return "IndexError"
+            return "--IndexError--"
     
     return wrapper
 
@@ -22,7 +22,11 @@ def hello(params):
 
 @input_error
 def add(params):
-    return "add"
+    
+    name, phone = params
+    contacts[name] = phone
+
+    return f"Contact {name} with phone {phone} added."
 
 
 @input_error
@@ -52,9 +56,9 @@ def help(params):
                                         name    - contact's name
                                         phone   - new phone number, separated by a space
         phone name                  - outputs the phone number for the specified contact
-        name                        - name of the contact whose number needs to be shown
+                                        name    - name of the contact whose number needs to be shown
         show all                    - displays all saved contacts with phone numbers
-        good bye, close, exit       - any of these commands will terminate the bot's operation
+        good bye | close | exit     - any of these commands will terminate the bot's operation
         help                        - displays this text
     """
 
@@ -72,7 +76,7 @@ def help(params):
         phone name                  - виводить номер телефону для зазначеного контакту
                                         name     - ім'я контакту, чий номер треба показати
         show all                    - виводить всі збереженні контакти з номерами телефонів
-        good bye, close, exit       - по будь-якій з цих команд бот завершує свою роботу
+        good bye | close | exit     - по будь-якій з цих команд бот завершує свою роботу
         help                        - виводить цей текст
     """
     return help_msg
