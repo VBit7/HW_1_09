@@ -15,14 +15,6 @@ def input_error(func):
 contacts = {}
 
 
-# "hello"      - відповідає у консоль "How can I help you?
-# "add ..."    - зберігає у словнику новий контакт. Замість ... - ім'я та номер телефону, обов'язково через пробіл.
-# "change ..." - зберігає в пам'яті новий номер телефону існуючого контакту. Замість ... - ім'я та номер телефону, обов'язково через пробіл.
-# "phone ...." - виводить у консоль номер телефону для зазначеного контакту. Замість ... - ім'я контакту, чий номер треба показати.
-# "show all"   - виводить всі збереженні контакти з номерами телефонів у консоль.
-# "good bye", "close", "exit" - по будь-якій з цих команд бот завершує свою роботу.
-
-
 @input_error
 def hello(params):
     return "How can I help you?"
@@ -49,21 +41,39 @@ def show(params):
 
 
 def help(params):
+
     help_msg = """
-        "hello" - Responds in the console with "How can I help you?"
-        
-        "add ..." - Saves a new contact in the dictionary.
-            Replace "..." with the name and phone number, separated by a space.
-        
-        "change ..." - Updates the phone number of an existing contact in memory.
-            Replace "..." with the name and new phone number, separated by a space.
-        
-        "phone ...." - Outputs the phone number for the specified contact to the console.
-            Replace "..." with the name of the contact whose number needs to be shown.
-        
-        "show all" - Displays all saved contacts with phone numbers in the console.
-        
-        "good bye", "close", "exit" - Any of these commands will terminate the bot's operation.
+    Possible commands:
+        hello                       - responds with "How can I help you?"
+        add name phone              - saves a new contact
+                                        name    - contact's name
+                                        phone   - phone number, separated by a space
+        change name phone           - updates the phone number of an existing contact
+                                        name    - contact's name
+                                        phone   - new phone number, separated by a space
+        phone name                  - outputs the phone number for the specified contact
+        name                        - name of the contact whose number needs to be shown
+        show all                    - displays all saved contacts with phone numbers
+        good bye, close, exit       - any of these commands will terminate the bot's operation
+        help                        - displays this text
+    """
+
+    if len(params) != 0:
+        if params[0] in ["ua", "ukr"]:
+            help_msg = """
+    Можливі команди:
+        hello                       - відповідає "How can I help you?"
+        add name phone              - зберігає новий контакт
+                                        name     - ім'я контакту
+                                        phone    - номер телефону, обов'язково через пробіл
+        change name phone           - зберігає новий номер телефону існуючого контакту
+                                        name     - ім'я контакту
+                                        phone    - номер телефону, обов'язково через пробіл
+        phone name                  - виводить номер телефону для зазначеного контакту
+                                        name     - ім'я контакту, чий номер треба показати
+        show all                    - виводить всі збереженні контакти з номерами телефонів
+        good bye, close, exit       - по будь-якій з цих команд бот завершує свою роботу
+        help                        - виводить цей текст
     """
     return help_msg
 
@@ -87,9 +97,12 @@ def main():
             break
 
         params = user_input.split(" ")
+
+        while "" in params:
+            params.remove("")
         
         if params[0] in commands:
-            print(user_input)
+            print(params)
             response = commands[params[0]](params[1:])
             print(response)
         else:
