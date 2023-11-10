@@ -89,7 +89,7 @@ commands = {
 
 
 def main():
-    # print("Hello!")
+    
     while True:
         user_input = input("Enter a command: ").lower().strip()
 
