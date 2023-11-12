@@ -3,11 +3,11 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except KeyError:
-            return "--KeyError--"
+            return "KeyError: Enter user name."
         except ValueError:
-            return "--ValueError--"
+            return "ValueError: Give me name and phone please."
         except IndexError:
-            return "--IndexError--"
+            return "IndexError: Invalid input. Please try again."
     
     return wrapper
 
