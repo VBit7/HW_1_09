@@ -43,12 +43,27 @@ def change(params):
 
 @input_error
 def phone(params):
-    return "phone"
+    name = params[0]
+    if name in contacts:
+        return f"Phone number for {name}: {contacts[name]}"
+    else:
+        raise KeyError    
 
 
 @input_error
 def show(params):
-    return "show all"
+    if not contacts:
+        return "No contacts found."
+
+    command = params[0]
+
+    if command == "all":
+        result = "Contacts:\n"
+        for name, phone in contacts.items():
+            result += f"   {name}: {phone}\n"
+        return result
+    else:
+        raise IndexError
 
 
 def help(params):
