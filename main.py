@@ -1,4 +1,11 @@
+"""
+Homework Assignment. Python Core. Module 9
+For a description of the task, please refer to the README.md file
+"""
 def input_error(func):
+    """
+    Decorator function to handle common input errors in the wrapped function.
+    """
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -8,7 +15,7 @@ def input_error(func):
             return "Give me name and phone please."
         except IndexError:
             return "Invalid input. Please try again."
-    
+
     return wrapper
 
 
@@ -17,6 +24,9 @@ contacts = {}
 
 @input_error
 def hello(*args):
+    """
+    Greets the user with a standard message.
+    """
     return "How can I help you?"
 
 
@@ -24,7 +34,7 @@ def hello(*args):
 def add(params: list) -> str:
     """
     Adds a new contact to the database.
-    
+
     Parameters:
         params (list): A list containing the name and phone number of the contact.
 
@@ -37,10 +47,11 @@ def add(params: list) -> str:
 
     if name not in contacts:
         contacts[name] = phone
+        result = f"Contact {name} with phone {phone} added."
     else:
-        return f"Contact {name} already exists. Use the 'change' command to modify the number."
+        result = f"Contact {name} already exists. Use the 'change' command to modify the number."
 
-    return f"Contact {name} with phone {phone} added."
+    return result
 
 
 @input_error
@@ -61,9 +72,11 @@ def change(params: list) -> str:
     name, phone = params
     if name in contacts:
         contacts[name] = phone
-        return f"Phone number updated for {name}. New phone number: {phone}"
+        result = f"Phone number updated for {name}. New phone number: {phone}"
     else:
-        return f"Contact '{name}' not found in the database."
+        result = f"Contact '{name}' not found in the database."
+
+    return result
 
 
 @input_error
@@ -81,9 +94,11 @@ def phone(params: list) -> str:
     """
     name = params[0]
     if name in contacts:
-        return f"Phone number for {name}: {contacts[name]}"
+        result = f"Phone number for {name}: {contacts[name]}"
     else:
-        return f"Contact '{name}' not found in the database."   
+        result = f"Contact '{name}' not found in the database."
+
+    return result
 
 
 @input_error
@@ -107,13 +122,26 @@ def show(params: list) -> str:
         result = "Contacts:\n"
         for name, phone in contacts.items():
             result += f"   {name}: {phone}\n"
-        return result
     else:
         raise IndexError
 
+    return result
 
-def help(params):
 
+def help(params: list) -> str:
+    """
+    Displays a list of possible commands and their descriptions.
+
+    Usage:
+        help [language]  - Displays a list of available commands and their descriptions.
+                           - Optional: Provide 'ua' or 'ukr' as a parameter to get the help message in Ukrainian.
+
+    Parameters:
+        params (list): A list containing an optional language parameter ('ua' or 'ukr').
+
+    Returns:
+        str: A message containing the list of possible commands and their descriptions in English or Ukrainian.    
+    """
     help_msg = """
     Possible commands:
         hello                       - responds with "How can I help you?"
@@ -161,7 +189,19 @@ commands = {
 
 
 def main():
-    
+    """
+    Main function to execute a simple command-line bot.
+
+    The bot continuously prompts the user to enter commands until the user types 'good bye', 'close', 'exit', or '.'.
+    It processes user input, executes corresponding commands, and provides responses.
+
+    Commands:
+        - 'good bye', 'close', 'exit', or '.' to terminate the bot.
+        - Type 'help' to see available commands.
+
+    Returns:
+        None    
+    """
     while True:
         user_input = input("Enter a command: ").lower().strip()
 
@@ -172,20 +212,15 @@ def main():
 
         while "" in params:
             params.remove("")
-        
+
         if params[0] in commands:
             response = commands[params[0]](params[1:])
             print(response)
         else:
             print("Unknown command. Type 'help' to see available commands.")
-    
-    print("Good bye!")
 
-    return None
+    print("Good bye!")
 
 
 if __name__ == "__main__":
     main()
-
-
-
