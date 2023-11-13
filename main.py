@@ -31,7 +31,14 @@ def add(params):
 
 @input_error
 def change(params):
-    return "change"
+    if len(params) != 2:
+        raise ValueError
+    name, phone = params
+    if name in contacts:
+        contacts[name] = phone
+        return f"Phone number updated for {name}. New phone number: {phone}"
+    else:
+        raise KeyError
 
 
 @input_error
