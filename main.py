@@ -3,11 +3,11 @@ def input_error(func):
         try:
             return func(*args, **kwargs)
         except KeyError:
-            return "KeyError: Enter user name."
+            return "Enter user name."
         except ValueError:
-            return "ValueError: Give me name and phone please."
+            return "Give me name and phone please."
         except IndexError:
-            return "IndexError: Invalid input. Please try again."
+            return "Invalid input. Please try again."
     
     return wrapper
 
@@ -16,21 +16,46 @@ contacts = {}
 
 
 @input_error
-def hello(params):
+def hello(*args):
     return "How can I help you?"
 
 
 @input_error
-def add(params):
+def add(params: list) -> str:
+    """
+    Adds a new contact to the database.
     
+    Parameters:
+        params (list): A list containing the name and phone number of the contact.
+
+    Returns:
+        str: A message indicating the success or failure of the operation.
+             - If the contact with the given name already exists, suggests using the 'change' command.
+             - If the contact is successfully added, confirms the addition with the name and phone number.
+    """
     name, phone = params
-    contacts[name] = phone
+
+    if name not in contacts:
+        contacts[name] = phone
+    else:
+        return f"Contact {name} already exists. Use the 'change' command to modify the number."
 
     return f"Contact {name} with phone {phone} added."
 
 
 @input_error
-def change(params):
+def change(params: list) -> str:
+    """
+    Updates the phone number of an existing contact in the database.
+
+    Parameters:
+        params (list): A list containing the name and new phone number of the contact.
+
+    Returns:
+        str: A message indicating the success or failure of the operation.
+             - If the contact with the given name is found, updates the phone number and confirms the change.
+             - If the contact is not found, notifies that the contact is not in the database.
+    """
     if len(params) != 2:
         raise ValueError
     name, phone = params
@@ -38,20 +63,41 @@ def change(params):
         contacts[name] = phone
         return f"Phone number updated for {name}. New phone number: {phone}"
     else:
-        raise KeyError
+        return f"Contact '{name}' not found in the database."
 
 
 @input_error
-def phone(params):
+def phone(params: list) -> str:
+    """
+    Outputs the phone number for the specified contact.
+
+    Parameters:
+        params (list): A list containing the name of the contact.
+
+    Returns:
+        str: A message indicating the success or failure of the operation.
+             - If the contact with the given name is found, displays the phone number.
+             - If the contact is not found, notifies that the contact is not in the database.
+    """
     name = params[0]
     if name in contacts:
         return f"Phone number for {name}: {contacts[name]}"
     else:
-        raise KeyError    
+        return f"Contact '{name}' not found in the database."   
 
 
 @input_error
-def show(params):
+def show(params: list) -> str:
+    """
+    Displays all saved contacts with their phone numbers.
+
+    Parameters:
+        params (list): A list containing the command 'all' to show all contacts.
+
+    Returns:
+        str: A message displaying all saved contacts and their phone numbers.
+             - If no contacts are found, a message indicating that no contacts are available.
+    """
     if not contacts:
         return "No contacts found."
 
@@ -128,7 +174,6 @@ def main():
             params.remove("")
         
         if params[0] in commands:
-            print(params)
             response = commands[params[0]](params[1:])
             print(response)
         else:
